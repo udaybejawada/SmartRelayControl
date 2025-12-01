@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BrainWaves – Free Open-Source Learning for Curious Minds</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="BrainWaves offers free, open-source tools and learning resources to energize the world with knowledge." />
+
+  <style>
+    /* ---------- Base styles (light theme) ---------- */
+    :root {
+      --bg: #f8fafc;
+      --bg-alt: #e5edf7;
+      --surface: #ffffff;
+      --accent: #2563eb;
+      --accent-soft: rgba(37, 99, 235, 0.08);
+      --accent-strong: #1d4ed8;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border-subtle: #e2e8f0;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --shadow-soft: 0 14px 30px rgba(15, 23, 42, 0.08);
+      --max-width: 1080px;
+      --transition-fast: 150ms ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .inner {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ---------- Header ---------- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(248, 250, 252, 0.96);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 0;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-weight: 650;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-size: 0.92rem;
+      color: #111827;
+    }
+
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #38bdf8, #6366f1 50%, #22c55e 100%);
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.5);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      position: relative;
+      padding-bottom: 0.2rem;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width var(--transition-fast);
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-strong);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      padding: 0.45rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid rgba(37, 99, 235, 0.35);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: #eff6ff;
+      color: var(--accent-strong);
+    }
+
+    .nav-cta:hover {
+      border-color: var(--accent-strong);
+      background: #dbeafe;
+    }
+
+    .nav-toggle {
+      display: none;
+    }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      padding: 3.75rem 0 3rem;
+      background: linear-gradient(135deg, #f9fafb, #eef2ff);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .hero-kicker {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.78rem;
+      color: var(--accent-strong);
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.1rem, 3.4vw + 1rem, 3rem);
+      line-height: 1.1;
+      margin-bottom: 0.7rem;
+      color: #0f172a;
+    }
+
+    .hero-title span {
+      color: var(--accent-strong);
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 1.6rem;
+      max-width: 32rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 0.8rem 1.4rem;
+      font-size: 0.92rem;
+      font-weight: 550;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+        background var(--transition-fast), border-color var(--transition-fast),
+        color var(--transition-fast);
+      background: transparent;
+      color: inherit;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 40px rgba(37, 99, 235, 0.45);
+    }
+
+    .btn-ghost {
+      border-color: var(--border-subtle);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--muted);
+    }
+
+    .btn-ghost:hover {
+      border-color: #cbd5f5;
+      color: #1f2933;
+      background: #ffffff;
+    }
+
+    .hero-meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .hero-meta strong {
+      color: var(--accent-strong);
+      font-weight: 500;
+    }
+
+    /* Hero visual: brain-universe image */
+    .hero-visual {
+      min-height: 260px;
+      border-radius: var(--radius-xl);
+      background: url("spectra-brain-light.jpg") center/cover no-repeat;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-visual::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top right, rgba(248, 250, 252, 0.1), rgba(248, 250, 252, 0.0));
+    }
+
+    /* ---------- Sections ---------- */
+    .section {
+      padding: 2.75rem 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .section-kicker {
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      font-size: 0.75rem;
+      color: var(--accent-strong);
+      margin-bottom: 0.4rem;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+      color: #111827;
+    }
+
+    .section-subtitle {
+      font-size: 0.96rem;
+      color: var(--muted);
+      max-width: 32rem;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.4rem;
+    }
+
+    .feature {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.2rem 1.2rem;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .feature-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      border: 1px solid #d1d5db;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.7rem;
+      font-size: 0.9rem;
+    }
+
+    .feature-title {
+      font-size: 1.02rem;
+      margin-bottom: 0.3rem;
+      color: #111827;
+    }
+
+    .feature-text {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .feature-tag {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--accent-strong);
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 1.8rem 0 2.2rem;
+      margin-top: auto;
+      font-size: 0.82rem;
+      color: var(--muted);
+      background: #f9fafb;
+    }
+
+    .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.9rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.1rem;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-strong);
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero {
+        padding-top: 2.8rem;
+      }
+
+      .hero-visual {
+        order: -1;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-toggle {
+        display: inline-flex;
+        font-size: 1.1rem;
+        border-radius: 999px;
+        border: 1px solid var(--border-subtle);
+        padding: 0.35rem 0.75rem;
+        cursor: pointer;
+        background: #ffffff;
+      }
+
+      .features-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .inner {
+        padding: 0 1.1rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn {
+        justify-content: center;
+      }
+    }
+
+    /* ---------- Optional: dark-mode tweak using your dark brain image ---------- */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #020617;
+        --bg-alt: #020617;
+        --surface: #020617;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --border-subtle: rgba(148, 163, 184, 0.4);
+        --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.9);
+      }
+
+      body {
+        background: radial-gradient(circle at top, #111827 0, #020617 40%, #000 100%);
+      }
+
+      header {
+        background: rgba(15, 23, 42, 0.94);
+        border-bottom-color: rgba(148, 163, 184, 0.45);
+      }
+
+      .hero {
+        background: radial-gradient(circle at top, rgba(15, 23, 42, 0.85), #020617);
+      }
+
+      .hero-visual {
+        background-image: url("spectra-brain-dark.jpg");
+        border-color: rgba(148, 163, 184, 0.55);
+      }
+
+      .feature {
+        background: linear-gradient(145deg, rgba(15, 23, 42, 0.95), #020617);
+      }
+
+      footer {
+        background: #020617;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <header>
+      <div class="inner">
+        <nav class="nav">
+          <div class="logo">
+            <div class="logo-mark"></div>
+            <span>Brain<span style="font-weight:400;opacity:0.85;">Waves</span></span>
+          </div>
+
+          <div class="nav-links">
+            <a href="#features">Apps</a>
+            <a href="#topics">Topics</a>
+            <a href="#contact">Contact</a>
+            <a href="#download" class="nav-cta">Get the App</a>
+          </div>
+
+          <button class="nav-toggle" aria-label="Menu">
+            ☰
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <main>
+      <section class="hero" id="top">
+        <div class="inner hero-grid">
+          <div>
+            <div class="hero-kicker">Open-Source Learning</div>
+            <h1 class="hero-title">
+              Free knowledge for every <span>curious mind</span>.
+            </h1>
+            <p class="hero-subtitle">
+              Brainwaves is a growing collection of material, apps, experiments, to open the world of science, arts and knowledge - from
+              EM waves, radar, drones, human biology, neuroscience, bio-signals, chemistry, language learning and STEM concepts accessible to learners
+              everywhere – completely free and open source.
+            </p>
+
+            <div class="hero-actions">
+              <a href="#features" class="btn btn-primary">
+                Explore the apps
+                <span>→</span>
+              </a>
+              <a href="#topics" class="btn btn-ghost">
+                Browse topics
+              </a>
+            </div>
+
+            <p class="hero-meta">
+              <strong>Built to share.</strong> Use, remix, and extend our tools in your own
+              classroom, lab, or home projects.
+            </p>
+          </div>
+
+          <!-- Hero visual -->
+          <div class="hero-visual" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <!-- Features -->
+      <section class="section" id="features">
+        <div class="inner">
+          <div class="section-header">
+            <div class="section-kicker">Apps & Tools</div>
+            <h2 class="section-title">Hands-on learning you can actually use.</h2>
+            <p class="section-subtitle">
+              Lightweight, focused apps that turn abstract ideas into experiments
+            </p>
+          </div>
+
+          <div class="features-grid">
+            <article class="feature">
+              <div class="feature-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" stroke="#2563eb" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3l6 6-6 6V3z" />
+                  <path d="M12 21l6-6-6-6v12z" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                  <line x1="6" y1="18" x2="18" y2="6" />
+                </svg>
+              </div>
+
+              <h3 class="feature-title">SmartRelayControl</h3>
+              <p class="feature-text">
+                Control a relay with a simple Bluetooth-based interface.
+              </p>
+              <div class="feature-tag">Bluetooth</div>
+                <!-- Legal / support links for Apple -->
+              <p style="margin-top:0.75rem; font-size:0.8rem;">
+                <a href="smartgate-privacy-policy.html">Privacy Policy</a> ·
+                <a href="smartgate-privacy-choices.html">Privacy Choices</a> ·
+                <a href="smartgate-support.html">Support</a>
+              </p>
+            </article>
+
+            <article class="feature">
+              <div class="feature-icon">📡</div>
+              <h3 class="feature-title">RF Lab (coming soon)</h3>
+              <p class="feature-text">
+                Visualize RF beams, in an interactive, browser-based lab.
+              </p>
+              <div class="feature-tag">Waves · RF</div>
+            </article>
+
+            <article class="feature">
+              <div class="feature-icon">🧠</div>
+              <h3 class="feature-title">Neuro Waves (coming soon)</h3>
+              <p class="feature-text">
+                Explore how the brain and heart generate electrical signals, with simple visualizations of
+                waveforms and what they mean.
+              </p>
+              <div class="feature-tag">Neuroscience · Bio-signals</div>
+            </article>
+
+            <article class="feature">
+              <div class="feature-icon">🫀</div>
+              <h3 class="feature-title">Human Body Atlas (coming soon)</h3>
+              <p class="feature-text">
+                System-by-system views of the human body – from skeleton and muscles to circulation and
+                respiration – designed for curious kids, students, and parents.
+              </p>
+              <div class="feature-tag">Biology</div>
+            </article>
+
+            <article class="feature">
+              <div class="feature-icon">⚗️</div>
+              <h3 class="feature-title">Chemistry Blocks (coming soon)</h3>
+              <p class="feature-text">
+                Tiny, focused modules that explain atoms, molecules, bonding, reactions, and everyday
+                chemistry with visuals and simple experiments.
+              </p>
+              <div class="feature-tag">Chemistry</div>
+            </article>
+
+            <article class="feature">
+              <div class="feature-icon">🧑‍💻</div>
+              <h3 class="feature-title">Languages (coming soon)</h3>
+              <p class="feature-text">
+                Learn languages the fun, focused way 
+              </p>
+              <div class="feature-tag">Open Source</div>
+            </article>
+          </div>
+
+
+      <!-- Topics placeholder -->
+      <section class="section" id="topics">
+        <div class="inner">
+          <div class="section-header">
+            <div class="section-kicker">Topics</div>
+            <h2 class="section-title">From imagination to reality.</h2>
+            <p class="section-subtitle">
+              Brainwaves will grow into a hub for open-source knowledge for learners of all ages.
+            </p>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Contact -->
+      <section class="section" id="contact">
+        <div class="inner">
+          <div class="section-header">
+            <div class="section-kicker">Contact</div>
+            <h2 class="section-title">Want to collaborate or contribute?</h2>
+            <p class="section-subtitle">
+              Add your own experiments, translate content, or use Brainwaves in your classroom.
+              Reach out and let’s build something open together.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="inner footer-row">
+        <div>© <span id="year"></span> Brainwaves.</div>
+        <div class="footer-links">
+          <a href="#top">Back to top</a>
+          <a href="#features">Apps</a>
+          <a href="#topics">Topics</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Tiny script: current year
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
